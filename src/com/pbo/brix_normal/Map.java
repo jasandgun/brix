@@ -21,7 +21,7 @@ public class Map {
 		else if (x == 2) {
 			initMap2(row,col);
 		}
-		else if (x == 3) {
+		else if (x == 3 || x == 4) {
 			initMap3(row,col);
 		}
 		
@@ -132,7 +132,6 @@ public class Map {
 			theMap[row][col] = 0;
 		}
 	}
-	
 	
 }
 

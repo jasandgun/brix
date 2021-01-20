@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -27,15 +28,14 @@ import com.pbo.brix_util.Background;
 import com.pbo.brix_util.Commons;
 import com.pbo.brix_util.FontMaker;
 
-
 public class NormalGame extends JPanel {
 	
 	//Fields
 	public static boolean running;
-	private boolean started;
+	private boolean started, localRun;
 	private BufferedImage image;
 	private Graphics2D g;
-	private int x;
+	private int currLevel;
 	
 	//entitas
 	private Ball Bola;
@@ -52,15 +52,16 @@ public class NormalGame extends JPanel {
 	private Background bg;
 	
 	//konstruktor
-	public NormalGame(int currlevel) {
-		this.x = currlevel;
+	public NormalGame(int currLevel) {
+		this.currLevel = currLevel;
+		HUD.currId = currLevel - 1;
 		init();
 	}
 	
 	public void init() {
 		Bola = new Ball();
-		Alas = new Paddle(100,30);
-		theMap = new Map(6, 5,x);
+		Alas = new Paddle(Commons.paddleWidth, Commons.paddleHeight);
+		theMap = new Map(Commons.mapRow, Commons.mapCol, currLevel);
 		theHUD = new HUD();
 		
 		screenShakeTimer = System.nanoTime();
@@ -68,7 +69,7 @@ public class NormalGame extends JPanel {
 		explosions = new ArrayList<Explosion>();
         
 		//boolean
-		running = true;
+		running = true; localRun = true;
 		started = false;
 		image = new BufferedImage(Commons.WIDTH, Commons.HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
@@ -87,8 +88,8 @@ public class NormalGame extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//start
 			if(!started && this.code == 0) {
-				int i = (int)(Math.random()*3);
-    			Bola.setDX(i);
+				int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+    			Bola.setDX(randomNum);
     			Bola.setDY(-2);
     			started = true;
 			} else if(started) {
@@ -100,7 +101,7 @@ public class NormalGame extends JPanel {
 	public Thread playGame() {
 		Thread play = new Thread() {
 			public void run() {
-				while (running) {
+				while (running && localRun) {
 					//update
 					update();
 					
@@ -124,6 +125,8 @@ public class NormalGame extends JPanel {
 	public void checkCollisions() {
 		Rectangle ballRect = Bola.getRect();
 		Rectangle paddleRect = Alas.getRect();
+		
+		//Power-Up Collisions
 		for(int i = 0;i<powerUp.size();i++) {
 			Rectangle puRect = powerUp.get(i).getRect();
 			if(paddleRect.intersects(puRect)) {
@@ -137,21 +140,16 @@ public class NormalGame extends JPanel {
 				}
 				if(powerUp.get(i).getType() == Skill.fastBall && !powerUp.get(i).getWasUsed()) {
 					Bola.fastBall();
-					Bola.setDrawTail(true);
 					powerUp.get(i).setWasUsed(true);
 				}
 			}
 		}
 		
+		//Paddle Collisions
 		if(ballRect.intersects(paddleRect)) {
 			Bola.setDY(-Bola.getDY());
-			if(Bola.getX() < 3 + Alas.getWidth()/4) {
-				Bola.setDX(Bola.getDX() - .5);
-			}
-			if(Bola.getX() < 3 + Alas.getWidth() && Bola.getX() > 3 + Alas.getWidth()/4) {
-				Bola.setDX(Bola.getDX() + .5);
-			}
 		}
+		
 		A: for(int row = 0; row<theMap.getMapArray().length; row++) {
 			for(int col = 0; col < theMap.getMapArray()[0].length; col++) {
 				if(theMap.getMapArray()[row][col]>0) {
@@ -218,8 +216,8 @@ public class NormalGame extends JPanel {
 		if (theMap.result() == true) {
 			theMap.resetResult();
 			LevelSelectPanel.updateHS();
-			x++;
-			running = false;
+			currLevel++;
+			localRun = false;
 			winOptions();
 		}
 		
@@ -230,26 +228,26 @@ public class NormalGame extends JPanel {
 			started = false;
 			if(theHUD.getLives() == 0) {
 				LevelSelectPanel.updateHS();
+				localRun = false;
 				loseOptions();
-				running = false;
 			}
 		}
 		
 	}
 	
 	private void winOptions() {
-		if(x <= 3) {
+		if(currLevel <= 3) {
 			int choose = JOptionPane.showConfirmDialog(null, 
-					"Continue to level " + (x - 1) + "?" ,"WELL DONE!", JOptionPane.YES_NO_OPTION,
+					"Continue to level " + (currLevel - 1) + "?" ,"WELL DONE!", JOptionPane.YES_NO_OPTION,
 					JOptionPane.INFORMATION_MESSAGE);
+			Commons.normalMusic.stopMusic();
 			if(choose == JOptionPane.YES_OPTION) {
-				NormalPanel.layargame = new NormalGame(x);
+				NormalPanel.layargame = new NormalGame(currLevel);
 	        	NormalPanel.layargame.playGame().start();
 	        	BRIX.main_frame.setContentPane(new NormalPanel());
 			} else {
 	        	BRIX.main_frame.setContentPane(new LevelSelectPanel());
 			}
-			Commons.normalMusic.stopMusic();
 			BRIX.main_frame.pack();
 		} else {
 			JLabel label = new JLabel(Commons.finalText);
@@ -269,7 +267,7 @@ public class NormalGame extends JPanel {
 				"You've lost, retry?" ,"LOSE", JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE);
 		if(choose == JOptionPane.YES_OPTION) {
-			NormalPanel.layargame = new NormalGame(x);
+			NormalPanel.layargame = new NormalGame(currLevel);
         	NormalPanel.layargame.playGame().start();
         	BRIX.main_frame.setContentPane(new NormalPanel());
 		} else {
@@ -298,7 +296,7 @@ public class NormalGame extends JPanel {
 	public void drawLevel() {
 		g.setFont(font);
 		g.setColor(Color.WHITE);
-		g.drawString("LEVEL " +(x-1), 175, 40);
+		g.drawString("LEVEL " +(currLevel-1), 175, 40);
 	}
 	
 	public void drawSkill() {

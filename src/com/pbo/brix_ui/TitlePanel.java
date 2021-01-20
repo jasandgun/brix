@@ -114,7 +114,6 @@ public class TitlePanel extends JPanel{
 	        public void actionPerformed(ActionEvent e) {
 	        	Commons.clickForward.playMusic(Commons.forwardClick);
 	        	Commons.titleMusic.stopMusic();
-	        	Commons.creditsMusic.playMusic(Commons.creditsMusicPath);
 	        	BRIX.main_frame.setContentPane(new CreditsPanel());
 	        	BRIX.main_frame.pack();
 	         }

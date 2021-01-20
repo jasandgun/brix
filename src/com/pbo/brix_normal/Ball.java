@@ -20,25 +20,15 @@ public class Ball {
 	private long speedTimer;
 	private boolean altSpeed;
 	private ArrayList<AlphaComposite> alphas;
-	private boolean drawTail = false;
-	private ArrayList<Point> tail;
 	private int tailLength = 10;
 	private Font font = new FontMaker(Commons.mainFont).getFont();
 	
 	public Ball() {
-		x = 200;
+		x = 235;
 		y = Commons.HEIGHT - (130);
-		tail = new ArrayList<Point>();
 	}
 	
 	public void update() {
-		drawTail = false;
-		if(tail.size() < tailLength) {
-			tail.add(new Point((int)x, (int)y));
-		} else {
-			tail.remove(0);
-			tail.add(new Point((int)x, (int)y));
-		}
 		if((System.nanoTime() - speedTimer) / 1000 > 2000000) {
 			if(altSpeed) {
 				altSpeed = false;
@@ -69,7 +59,6 @@ public class Ball {
 	public void setPosition() {
 		x += directionX;
 		y += directionY;
-		
 		if(x<0) {
 			directionX = -directionX;
 		}
@@ -85,10 +74,6 @@ public class Ball {
 	}
 	
 	public void move(){
-		
-		//Moves ball
-		//Adds x and y velocities to x and y positions, respectively
-		
 		this.setX(this.getX() + this.getDX());
         this.setY(this.getY() + this.getDY());
 	}
@@ -146,19 +131,15 @@ public class Ball {
 	}
 	
 	public void resetBola() {
-		x = 200;
+		x = 235;
 		y = Commons.HEIGHT - (130);
 		directionX = 0;
 		directionY = 0;
 	}
 	
-	public void setDrawTail(boolean draw) {
-		drawTail = draw;
-	}
-	
 	public boolean isFall() {
 		boolean fall = false;
-		if(y > Commons.HEIGHT - ballSize *2.5) {
+		if(y > Commons.HEIGHT - 100 + Commons.paddleHeight/2 +1) {
 			fall = true;
 		}
 		return fall;

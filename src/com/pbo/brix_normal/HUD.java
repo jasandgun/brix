@@ -21,7 +21,10 @@ public class HUD {
 	
 	public void init() {
 		score = 0;
-		lives = 3;
+		if (currId == 3) 
+			lives = 1;
+		else 
+			lives = 3;
 		lastScore = 0;
 	}
 	

@@ -27,6 +27,10 @@ public interface Commons {
     String exitButton = "exit";
     MusicPlay titleMusic = new MusicPlay();
     
+    // Standard values
+    final int mapRow = 6, mapCol = 5;
+    final int paddleWidth = 100, paddleHeight = 25;
+    
     // zen mode
     String zenBGPath = "res/image/bg_zen.jpg";
     String zenMusicPath = "res/sound/ZenMode.wav";

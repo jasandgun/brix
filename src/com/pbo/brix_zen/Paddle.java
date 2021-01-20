@@ -74,6 +74,10 @@ public class Paddle extends JLabel{
 		x = i;
 	}
 
+	public void resetPaddle() { 
+		x = (Commons.WIDTH - width)/2;
+	}
+	
 	public void setWidthTimer() {
 		widthTimer = System.nanoTime();
 	}

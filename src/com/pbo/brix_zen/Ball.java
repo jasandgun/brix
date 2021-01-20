@@ -32,14 +32,9 @@ public class Ball {
 	
 	public void update() {
 		setPosition();
-		Lose();
 	}
 	
-	public void move(){
-		
-		//Moves ball
-		//Adds x and y velocities to x and y positions, respectively
-		
+	public void move(){		
 		this.setX(this.getX() + this.getDX());
         this.setY(this.getY() + this.getDY());
 	}
@@ -93,17 +88,18 @@ public class Ball {
 	}
 	
 	public void resetBola() {
-		x = 200;
-		y = 400;
+		x = 235;
+		y = Commons.HEIGHT - (130);
+		directionX = 0;
+		directionY = 0;
 	}
 	
-	public boolean Lose() {
-		boolean loser = false;
-		if(y > Commons.HEIGHT - ballSize * 2.5) {
-			resetBola();
-			loser = true;
+	public boolean isFall() {
+		boolean fall = false;
+		if(y > Commons.HEIGHT - 100 + Commons.paddleHeight/2 +1) {
+			fall = true;
 		}
-		return loser;		
+		return fall;
 	}
 	
 }

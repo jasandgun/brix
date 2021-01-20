@@ -15,8 +15,8 @@ public class Paddle {
 	private int width, height, startWidth;
 	private long widthTimer;
 	private boolean altWidthShrink, altWidthWide;
-	public final int positionY = Commons.HEIGHT - 100;
-	private Font font = new FontMaker(Commons.mainFont).getFont();
+	public static final int positionY = Commons.HEIGHT - 100;
+	private Font font = new FontMaker(Commons.mainFont).getFont(); 
 	
 	//konstruktor
 	public Paddle(int width, int height) {
@@ -36,7 +36,7 @@ public class Paddle {
  			}
         }
         if(code == 1){
-        	if(this.getX() + 60 < 500) {
+        	if(this.getX() + width < 500) {
             	this.setX(this.getX() + 7);
             }
         }

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -28,7 +29,7 @@ public class ZenGame extends JPanel{
 	
 	//entitas
 	private Ball Bola;
-	private Paddle Alas = new Paddle(100,200);
+	private Paddle Alas;
 	private Map theMap;
 	private ArrayList<Explosion> explosions;
 	
@@ -44,14 +45,12 @@ public class ZenGame extends JPanel{
 
 	public void init() {
 		Bola = new Ball();
-		Alas = new Paddle(100,30);
-		theMap = new Map(6, 5);
+		Alas = new Paddle(Commons.paddleWidth, Commons.paddleHeight);
+		theMap = new Map(Commons.mapRow, Commons.mapCol);
 		setPreferredSize(Commons.frameSize);
 		screenShakeTimer = System.nanoTime();
 		explosions = new ArrayList<Explosion>();
 		
-		
-		//boolean
 		running = true;
 		started = false;
 		image = new BufferedImage(Commons.WIDTH, Commons.HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -67,13 +66,12 @@ public class ZenGame extends JPanel{
 		
 		MoveAction(int code){
 			this.code = code;
-		}
-		
+		} 
 		public void actionPerformed(ActionEvent e) {
 			//start
 			if(!started && this.code == 0) {
-				int i = (int)(Math.random()*2);
-    			Bola.setDX(i);
+				int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+    			Bola.setDX(randomNum);
     			Bola.setDY(-2);
     			started = true;
 			} else if(started) {
@@ -112,18 +110,13 @@ public class ZenGame extends JPanel{
 		
 		if(ballRect.intersects(paddleRect)) {
 			Bola.setDY(-Bola.getDY());
-			if(Bola.getX() < 3 + Alas.getWidth()/4) {
-				Bola.setDX(Bola.getDX() - .5);
-			}
-			if(Bola.getX() < 3 + Alas.getWidth() && Bola.getX() > 3 + Alas.getWidth()/4) {
-				Bola.setDX(Bola.getDX() + .5);
-			}
 		}
+		
 		A: for(int row = 0; row<theMap.getMapArray().length; row++) {
 			for(int col = 0; col < theMap.getMapArray()[0].length; col++) {
 				if(theMap.getMapArray()[row][col]>0) {
-					int brickX = col * theMap.getBrickWidth() + theMap.paddleHOR;
-					int brickY = row * theMap.getBrickHeight() + theMap.paddleVER;
+					int brickX = col * (theMap.getBrickWidth()+5) + theMap.paddleHOR;
+					int brickY = row * (theMap.getBrickHeight()+5) + theMap.paddleVER;
 					int brickWidth = theMap.getBrickWidth();
 					int brickHeight = theMap.getBrickHeight();
 					Rectangle brickRect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
@@ -171,13 +164,15 @@ public class ZenGame extends JPanel{
 			}
 		}
 		
-		if (theMap.result() == true) {
-			theMap.resetResult();
-			theMap = new Map(6,5);
+		if(theMap.result() || Bola.isFall()) {
+			if (theMap.result()) {
+				theMap.resetResult();
+				theMap = new Map(Commons.mapRow, Commons.mapCol);
+			}
 			Bola.resetBola();
+			Alas.resetPaddle();
+			started = false;
 		}
-		
-		
 	}
 	
 	public void draw() {
@@ -194,13 +189,7 @@ public class ZenGame extends JPanel{
 	}
 	
 	public void isEnd() {
-		theMap.initMap(6, 5);
-	}
-	
-	public void replay() {
-		if(Bola.Lose() == false) {
-			playGame();
-		}
+		theMap.initMap(Commons.mapRow, Commons.mapCol);
 	}
 	
 	public void paintComponent(Graphics g) {

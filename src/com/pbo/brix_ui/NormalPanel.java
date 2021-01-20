@@ -50,8 +50,7 @@ public class NormalPanel extends JPanel {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	        	NormalGame.running = false;
-	        	LevelSelectPanel.scores[HUD.currId] = Math.max(LevelSelectPanel.scores[HUD.currId], HUD.lastScore);
-	        	LevelSelectPanel.updateHS();
+	            LevelSelectPanel.updateHS();
 	        	Commons.normalMusic.stopMusic();
 	        	Commons.clickBackward.playMusic(Commons.backwardClick);
 	        	BRIX.main_frame.setContentPane(new LevelSelectPanel());
