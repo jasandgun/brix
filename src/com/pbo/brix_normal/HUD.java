@@ -1,0 +1,55 @@
+package com.pbo.brix_normal;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+
+import com.pbo.brix_util.Commons;
+import com.pbo.brix_util.FontMaker;
+
+public class HUD {
+
+	//Fields
+	private int score, lives;
+	private Font font = new FontMaker(Commons.mainFont).getFont();
+	public static int lastScore = 0, currId = 0;
+	
+	//konstruktor
+	public HUD() {
+		init();
+	}
+	
+	public void init() {
+		score = 0;
+		lives = 3;
+		lastScore = 0;
+	}
+	
+	public void draw(Graphics2D g) {
+		g.setFont(font.deriveFont(20f));
+		g.setColor(Color.WHITE);
+		g.drawString("Score: " + score, 20, 20);
+		g.drawString("Lives: " +lives, 20, 40);
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public void addScore(int nilai) {
+		score += nilai;
+		lastScore = score;
+	}
+	
+	public void resetScore() {
+		score = 0;
+	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public void lostLives() {
+		--lives;
+	}
+}
