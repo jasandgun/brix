@@ -49,7 +49,7 @@ public class NormalPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
-	        	layargame.playGame().interrupt();
+	        	NormalGame.running = false;
 	        	LevelSelectPanel.scores[HUD.currId] = Math.max(LevelSelectPanel.scores[HUD.currId], HUD.lastScore);
 	        	LevelSelectPanel.updateHS();
 	        	Commons.normalMusic.stopMusic();

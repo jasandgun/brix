@@ -147,7 +147,9 @@ public class Ball {
 	
 	public void resetBola() {
 		x = 200;
-		y = 400;
+		y = Commons.HEIGHT - (130);
+		directionX = 0;
+		directionY = 0;
 	}
 	
 	public void setDrawTail(boolean draw) {

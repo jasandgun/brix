@@ -27,6 +27,8 @@ public class CreditsPanel extends JPanel implements ActionListener {
 	private final JLabel creditLabel;
 	
 	public CreditsPanel() {
+		Commons.creditsMusic.playMusic(Commons.creditsMusicPath);
+		
 		setPreferredSize(Commons.frameSize);
 		this.imSrc = new ImageIcon(Commons.titleBGPath).getImage();
 		this.brixIcon = new ImageIcon(Commons.iconPath).getImage();

@@ -97,13 +97,9 @@ public class Paddle {
 		x = i;
 	}
 	
-//	public void resetPaddle() {
-//		altWidth = false;
-//		this.width=width;
-//		startWidth = width;
-//		this.height=height;
-//		x = (Main.WIDTH - width)/2;
-//	}
+	public void resetPaddle() { 
+		x = (Commons.WIDTH - width)/2;
+	}
 
 
 	public void setWidthTimer() {

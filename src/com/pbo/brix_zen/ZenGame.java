@@ -21,7 +21,7 @@ import com.pbo.brix_util.Commons;
 public class ZenGame extends JPanel{
 	
 	//Fields
-	private boolean running;
+	public static boolean running;
 	private boolean started;
 	private BufferedImage image;
 	private Graphics2D g;
@@ -39,9 +39,7 @@ public class ZenGame extends JPanel{
 	
 	//konstruktor
 	public ZenGame() {
-		
 		init();
-		
 	}
 
 	public void init() {

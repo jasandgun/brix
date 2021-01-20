@@ -31,7 +31,7 @@ import com.pbo.brix_util.FontMaker;
 public class NormalGame extends JPanel {
 	
 	//Fields
-	private boolean running;
+	public static boolean running;
 	private boolean started;
 	private BufferedImage image;
 	private Graphics2D g;
@@ -94,7 +94,6 @@ public class NormalGame extends JPanel {
 			} else if(started) {
 				Alas.move(this.code);
 			}
-//			repaint();
 		}
 	}
 	
@@ -219,15 +218,26 @@ public class NormalGame extends JPanel {
 		if (theMap.result() == true) {
 			theMap.resetResult();
 			LevelSelectPanel.updateHS();
-			drawWin();
 			x++;
 			running = false;
-			options();
+			winOptions();
+		}
+		
+		if(Bola.isFall()) {
+			theHUD.lostLives();
+			Bola.resetBola();
+			Alas.resetPaddle();
+			started = false;
+			if(theHUD.getLives() == 0) {
+				LevelSelectPanel.updateHS();
+				loseOptions();
+				running = false;
+			}
 		}
 		
 	}
 	
-	private void options() {
+	private void winOptions() {
 		if(x <= 3) {
 			int choose = JOptionPane.showConfirmDialog(null, 
 					"Continue to level " + (x - 1) + "?" ,"WELL DONE!", JOptionPane.YES_NO_OPTION,
@@ -237,11 +247,9 @@ public class NormalGame extends JPanel {
 	        	NormalPanel.layargame.playGame().start();
 	        	BRIX.main_frame.setContentPane(new NormalPanel());
 			} else {
-	        	Commons.normalMusic.stopMusic();
-	        	Commons.lvselMusic.playMusic(Commons.lvselMusicPath);
-	        	Commons.lvselMusic.musicLoop();
 	        	BRIX.main_frame.setContentPane(new LevelSelectPanel());
 			}
+			Commons.normalMusic.stopMusic();
 			BRIX.main_frame.pack();
 		} else {
 			JLabel label = new JLabel(Commons.finalText);
@@ -249,11 +257,26 @@ public class NormalGame extends JPanel {
         	JOptionPane.showMessageDialog(BRIX.main_frame, label,
         			"thanks", JOptionPane.PLAIN_MESSAGE);
         	Commons.normalMusic.stopMusic();
-        	Commons.creditsMusic.playMusic(Commons.creditsMusicPath);
         	BRIX.main_frame.setContentPane(new CreditsPanel());
         	BRIX.main_frame.pack();
 		}
 		return;
+	}
+	
+	private void loseOptions() {
+		Commons.normalMusic.stopMusic();
+		int choose = JOptionPane.showConfirmDialog(null, 
+				"You've lost, retry?" ,"LOSE", JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE);
+		if(choose == JOptionPane.YES_OPTION) {
+			NormalPanel.layargame = new NormalGame(x);
+        	NormalPanel.layargame.playGame().start();
+        	BRIX.main_frame.setContentPane(new NormalPanel());
+		} else {
+        	BRIX.main_frame.setContentPane(new LevelSelectPanel());
+		}
+		
+		BRIX.main_frame.pack();
 	}
 	
 	public void draw() {
@@ -266,18 +289,7 @@ public class NormalGame extends JPanel {
 		theHUD.draw(g);
 		drawSkill();
 		drawLevel();
-		// Lose Condition
-		if(Bola.isFall()) {
-			theHUD.lostLives();
-			Bola.resetBola();
-			
-			if(theHUD.getLives() == 0) {
-				LevelSelectPanel.updateHS();
-				drawLoser();
-				running = false;
-			}
-		}
-		
+
 		for(Explosion bs : explosions) {
 			bs.draw(g);
 		}
@@ -289,30 +301,12 @@ public class NormalGame extends JPanel {
 		g.drawString("LEVEL " +(x-1), 175, 40);
 	}
 	
-	public void drawWin() {
-		g.setColor(Color.WHITE);
-		g.setFont(font);
-		g.drawString("well done", 175,400);
-	}
-	
-	public void drawLoser() {
-		g.setColor(Color.RED);
-		g.setFont(font);
-		g.drawString("too bad", 160, 400);
-	}
-	
 	public void drawSkill() {
 		for(Skill pu : powerUp) {
 			pu.draw(g);
 		}
 	}
-	
-//	public void replay() {
-//		if(Bola.Lose() == false) {
-//			playGame();
-//		}
-//	}
-	
+		
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	
 		int x = 0;

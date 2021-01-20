@@ -48,7 +48,7 @@ public class ZenPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
-	        	layargame.playGame().interrupt();
+	        	ZenGame.running = false;
 	        	Commons.zenMusic.stopMusic();
 	        	Commons.clickBackward.playMusic(Commons.backwardClick);
 	        	BRIX.main_frame.setContentPane(new TitlePanel());
