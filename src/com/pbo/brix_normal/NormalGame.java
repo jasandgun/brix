@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
@@ -20,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
+import com.pbo.brix_normal.Map.RemindTask;
 import com.pbo.brix_ui.BRIX;
 import com.pbo.brix_ui.CreditsPanel;
 import com.pbo.brix_ui.LevelSelectPanel;
@@ -88,6 +91,9 @@ public class NormalGame extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//start
 			if(!started && this.code == 0) {
+				if(currLevel == 5) {
+					theMap.startTimer();
+				}
 				int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
     			Bola.setDX(randomNum);
     			Bola.setDY(-2);
@@ -224,25 +230,31 @@ public class NormalGame extends JPanel {
 			localRun = false;
 			winOptions();
 		}
-		
+		// Lose Condition
 		if(Bola.isFall()) {
 			theHUD.lostLives();
 			Bola.resetBola();
 			Alas.resetPaddle();
 			started = false;
-			if(theHUD.getLives() == 0 || currLevel == 5 && theMap.Time()) {
+			if(theHUD.getLives() == 0) {
 				LevelSelectPanel.updateHS();
 				localRun = false;
 				loseOptions();
 			}
 		}
+		if(Map.timeout && currLevel == 5) {
+			LevelSelectPanel.updateHS();
+			localRun = false; Map.timeout = false;
+			loseOptions();
+		}
 		
 	}
 	
 	private void winOptions() {
-		if(currLevel <= 3) {
+		if(currLevel <= 5) {
 			int choose = JOptionPane.showConfirmDialog(null, 
-					"Continue to level " + (currLevel - 1) + "?" ,"WELL DONE!", JOptionPane.YES_NO_OPTION,
+					"Your score: " + HUD.lastScore + "\n"
+					+ "Continue to level " + (currLevel - 1) + "?" ,"WELL DONE!", JOptionPane.YES_NO_OPTION,
 					JOptionPane.INFORMATION_MESSAGE);
 			Commons.normalMusic.stopMusic();
 			if(choose == JOptionPane.YES_OPTION) {
@@ -268,6 +280,7 @@ public class NormalGame extends JPanel {
 	private void loseOptions() {
 		Commons.normalMusic.stopMusic();
 		int choose = JOptionPane.showConfirmDialog(null, 
+				"Your score: " + HUD.lastScore + "\n" + 
 				"You've lost, retry?" ,"LOSE", JOptionPane.YES_NO_OPTION,
 				JOptionPane.INFORMATION_MESSAGE);
 		if(choose == JOptionPane.YES_OPTION) {

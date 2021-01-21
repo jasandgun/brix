@@ -12,25 +12,24 @@ public class Map {
 
 	//Fields
 	private int [][] theMap;
-	private int brickHeight, brickWidth, second = 0;
+	private int brickHeight, brickWidth;
 	public final int paddleHOR = 80, paddleVER = 50;
 	boolean hasil = false;
-	Timer timer = new Timer();
-	TimerTask task = new TimerTask() {
-
-		@Override
-		public void run() {
-			second++;
-			
-		}};
-		
-	public boolean Time() {
-		boolean cek = false;
-		if (second == 20)
-				cek = true;
-		return cek;
-	}
+	Timer timer;
+	public static boolean timeout = true;
 	
+    class RemindTask extends TimerTask {
+        public void run() {
+        	timeout = true;
+            timer.cancel(); //Terminate the timer thread
+        }
+    }
+	
+    public void startTimer() {
+    	timer = new Timer();
+        timer.schedule(new RemindTask(), Commons.timeLimit*1000);
+    }
+    
 	public Map(int row, int col, int x) {
 		if(x == 1) {
 			initMap1(row, col);
@@ -46,6 +45,7 @@ public class Map {
 		}
 		else if (x == 5) {
 			initMap5(row,col);
+			timeout = false;
 		}
 		
 		

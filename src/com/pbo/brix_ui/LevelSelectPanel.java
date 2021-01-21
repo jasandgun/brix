@@ -45,7 +45,7 @@ public class LevelSelectPanel extends JPanel{
 		levelLabel(); exitButton();
 		this.add(upperPanel);
 		String[] nums = {"zero", "one", "two", "three", "four"};
-		for (int i = 0; i < nums.length - 1; i++) {
+		for (int i = 0; i < nums.length; i++) {
 			banners[i] = new LevelBanner("level " + nums[i], i);
 			this.add(banners[i].getPanel());			
 		}
