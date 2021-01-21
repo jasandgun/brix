@@ -17,30 +17,9 @@ public class Map {
 	public final int paddleHOR = 80, paddleVER = 50;
 	boolean hasil = false;
 	public static Timer timer;
-	TimerTask task = new TimerTask() {
-		public void run() {
-			System.out.println(secondsPassed);
-			HUD.seconds = secondsPassed;
-			secondsPassed--;
-		}
-	};
+	public static boolean timeout = true, timerStarted = false;
 	
-	public static boolean timeout = true;
 	
-    class RemindTask extends TimerTask {
-        public void run() {
-        	timeout = true;
-            timer.cancel(); //Terminate the timer thread
-            
-        }
-    }
-    public void startTimer() {
-    	timer = new Timer();
-        timer.schedule(new RemindTask(), Commons.timeLimit*1000);
-        timer.scheduleAtFixedRate(task, 0, 1000);
-    }
-    
-    
 	public Map(int row, int col, int x) {
 		if(x == 1) {
 			initMap1(row, col);
@@ -64,6 +43,33 @@ public class Map {
 		brickHeight = (Commons.HEIGHT/3 - paddleVER) / row;
 	}
 	
+	TimerTask task = new TimerTask() {
+		public void run() {
+			timerStarted = true;
+			HUD.seconds = secondsPassed;
+			secondsPassed--;
+		}
+	};
+	
+    class RemindTask extends TimerTask {
+        public void run() {
+        	timeout = true;
+            timer.cancel(); //Terminate the timer thread
+            
+        }
+    }
+    
+    public void startTimer() {
+    	timer = new Timer();
+        timer.schedule(new RemindTask(), Commons.timeLimit*1000);
+        timer.scheduleAtFixedRate(task, 0, 1000);
+    }
+    
+    public static void stopTimer() {
+    	timer.cancel();
+    	timerStarted = false;
+    }
+    
 	public void initMap1(int row, int col) {
 		theMap = new int[row][col];
 		for(int i=0; i<theMap.length; i++) {

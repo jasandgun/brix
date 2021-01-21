@@ -95,7 +95,7 @@ public class NormalGame extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//start
 			if(!started && this.code == 0) {
-				if(currLevel == 5) {
+				if(currLevel == 5 && !Map.timerStarted) {
 					theMap.startTimer();
 				}
 				int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
@@ -180,9 +180,11 @@ public class NormalGame extends JPanel {
 					int brickWidth = theMap.getBrickWidth();
 					int brickHeight = theMap.getBrickHeight();
 					Rectangle brickRect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
+					
 					if(ballRect.intersects(brickRect)) {
 						if(theMap.getMapArray()[row][col] == 1) {
 							explosions.add(new Explosion(brickX, brickY, theMap));
+							Commons.brickBreak.playMusic(Commons.brickBreakPath);
 							screenShakeActive = true;
 							screenShakeTimer = System.nanoTime();
 						}
@@ -287,7 +289,7 @@ public class NormalGame extends JPanel {
 			}
 			BRIX.main_frame.pack();
 		} else {
-			Map.timer.cancel();
+			Map.stopTimer();
 			JLabel label = new JLabel(Commons.finalText);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
         	JOptionPane.showMessageDialog(BRIX.main_frame, label,
@@ -300,6 +302,8 @@ public class NormalGame extends JPanel {
 	}
 	
 	private void loseOptions() {
+		if (currLevel >= 5)
+			Map.stopTimer();
 		Commons.normalMusic.stopMusic();
 		int choose = JOptionPane.showConfirmDialog(null, 
 				"Your score: " + HUD.lastScore + "\n" + 
@@ -339,9 +343,12 @@ public class NormalGame extends JPanel {
 	}
 	
 	public void drawMultiplier() {
+		int score = scoreNow - scoreTemp;
 		g.setFont(font.deriveFont(20f));
-		g.setColor(Color.GREEN);
-		g.drawString("+" + (scoreNow - scoreTemp), 130, 20);
+		if(score >= 0) {
+			g.setColor(Color.GREEN);
+			g.drawString("+" + (score), 130, 20);			
+		}
 	}
 	
 	public void drawExtra() {

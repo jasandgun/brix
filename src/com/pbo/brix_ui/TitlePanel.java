@@ -19,7 +19,6 @@ import com.pbo.brix_util.Commons;
 import com.pbo.brix_util.FontMaker;
 import com.pbo.brix_zen.ZenGame;
 
-
 public class TitlePanel extends JPanel{
 	
 	private Image imSrc;

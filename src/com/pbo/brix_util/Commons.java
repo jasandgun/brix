@@ -36,8 +36,6 @@ public interface Commons {
     String zenMusicPath = "res/sound/ZenMode.wav";
     String zenButton = "ZEN";
     MusicPlay zenMusic = new MusicPlay();
-//    MusicPlay powerUpMusic = new MusicPlay();
-//    String powerUp = "res/power_up.wav";
     
     // level selector
     String levelLabel = "LEVELS";
@@ -46,13 +44,15 @@ public interface Commons {
     MusicPlay lvselMusic = new MusicPlay();
     
     // normal mode
-    final int timeLimit = 20;
+    final int timeLimit = 100;
     String normalButton = "NORMAL";
     String normalBGPath = "res/image/bg_level.jpg";
     MusicPlay normalMusic = new MusicPlay();
     String normalMusicPath = "res/sound/NormalMode.wav";
     String finalText = "<html><center>Congratulations!<br>"
     		+ "You have finished the game!";
+    MusicPlay brickBreak = new MusicPlay();
+    String brickBreakPath = "res/sound/brick-break.wav";
     
     // credits
     String creditsText = "<html><center>BRIX<br>"

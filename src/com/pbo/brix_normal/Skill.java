@@ -120,6 +120,4 @@ public class Skill {
 		this.wasUsed = wasUsed;
 	}
 
-
-	
 }

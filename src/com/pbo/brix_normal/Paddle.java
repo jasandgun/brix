@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
 
 import com.pbo.brix_util.Commons;
 import com.pbo.brix_util.FontMaker;

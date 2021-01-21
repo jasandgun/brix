@@ -1,13 +1,10 @@
 package com.pbo.brix_normal;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import com.pbo.brix_util.Commons;
 import com.pbo.brix_util.FontMaker;
@@ -19,8 +16,6 @@ public class Ball {
 	private int ballSize = 30;
 	private long speedTimer;
 	private boolean altSpeed;
-	private ArrayList<AlphaComposite> alphas;
-	private int tailLength = 10;
 	private Font font = new FontMaker(Commons.mainFont).getFont();
 	
 	public Ball() {
@@ -36,18 +31,6 @@ public class Ball {
 			}
 		}
 		setPosition();
-	}
-	
-	public void initTail() {
-		float alpha = 1f;
-		AlphaComposite alcom;
-		
-		for(int i = 0; i < tailLength; i++) {
-			double alphaD = i * (100 / tailLength);
-			alpha = (float) alphaD / 100;
-	        alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
-	        alphas.add(alcom);
-		}
 	}
 	
 	public void fastBall() { 

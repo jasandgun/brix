@@ -51,7 +51,7 @@ public class NormalPanel extends JPanel {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	        	if(HUD.currId == 4) {
-		        	Map.timer.cancel();
+		        	Map.stopTimer();
 	        	}
 	        	NormalGame.running = false;
 	            LevelSelectPanel.updateHS();

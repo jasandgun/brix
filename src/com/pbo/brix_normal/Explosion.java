@@ -3,7 +3,6 @@ package com.pbo.brix_normal;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-
 public class Explosion {
 	
 	//Fields

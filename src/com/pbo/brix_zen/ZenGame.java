@@ -143,7 +143,6 @@ public class ZenGame extends JPanel{
 	public void update() {
 		checkCollisions();
 		Bola.update();
-		Alas.update();
 		
 		this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0), "start");
 		this.getActionMap().put("start", new MoveAction(0));

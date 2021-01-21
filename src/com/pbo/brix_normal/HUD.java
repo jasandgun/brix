@@ -76,7 +76,7 @@ public class HUD {
 	}
 	
 	public void Multiplier() {
-		score *= (int)(Math.random() * 10);
+		score *= (int)(Math.random() * 10 + 1);
 		setScoreTimer();
 	}
 	

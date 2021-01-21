@@ -14,16 +14,12 @@ import com.pbo.brix_util.Commons;
 public class Paddle extends JLabel{
 	//Fields
 	private double x;
-	private int width, height, startWidth;
-	private long widthTimer;
-	private boolean altWidth;
+	private int width, height;
 	public final int positionY = Commons.HEIGHT - 100;
 	
 	//konstruktor
 	public Paddle(int width, int height) {
-		altWidth = false;
 		this.width=width;
-		startWidth = width;
 		this.height=height;
 		x = (Commons.WIDTH - width)/2;
 	}
@@ -41,15 +37,6 @@ public class Paddle extends JLabel{
             }
         }
 
-	}
-	
-	
-	//update
-	public void update () {
-		if((System.nanoTime() - widthTimer) / 1000 > 4000000) {
-			width = startWidth;
-			altWidth = false;
-		}
 	}
 	
 	//draw
@@ -76,10 +63,6 @@ public class Paddle extends JLabel{
 
 	public void resetPaddle() { 
 		x = (Commons.WIDTH - width)/2;
-	}
-	
-	public void setWidthTimer() {
-		widthTimer = System.nanoTime();
 	}
 	
 }
