@@ -55,4 +55,8 @@ public class HUD {
 	public void lostLives() {
 		--lives;
 	}
+	
+	public void extraLive() {
+		++lives;
+	}
 }
