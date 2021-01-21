@@ -18,6 +18,7 @@ import com.pbo.brix_util.ButtonMaker;
 import com.pbo.brix_util.Commons;
 import com.pbo.brix_util.FontMaker;
 import com.pbo.brix_normal.HUD;
+import com.pbo.brix_normal.Map;
 import com.pbo.brix_normal.NormalGame;
 
 public class NormalPanel extends JPanel {
@@ -49,6 +50,9 @@ public class NormalPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
+	        	if(HUD.currId == 4) {
+		        	Map.timer.cancel();
+	        	}
 	        	NormalGame.running = false;
 	            LevelSelectPanel.updateHS();
 	        	Commons.normalMusic.stopMusic();
