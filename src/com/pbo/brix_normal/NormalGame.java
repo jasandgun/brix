@@ -142,6 +142,10 @@ public class NormalGame extends JPanel {
 					Bola.fastBall();
 					powerUp.get(i).setWasUsed(true);
 				}
+				if(powerUp.get(i).getType() == Skill.extraLife && !powerUp.get(i).getWasUsed()) {
+					theHUD.extraLive();
+					powerUp.get(i).setWasUsed(true);
+				}
 			}
 		}
 		
@@ -226,7 +230,7 @@ public class NormalGame extends JPanel {
 			Bola.resetBola();
 			Alas.resetPaddle();
 			started = false;
-			if(theHUD.getLives() == 0) {
+			if(theHUD.getLives() == 0 || currLevel == 5 && theMap.Time()) {
 				LevelSelectPanel.updateHS();
 				localRun = false;
 				loseOptions();
