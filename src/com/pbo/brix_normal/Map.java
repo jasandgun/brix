@@ -3,6 +3,8 @@ package com.pbo.brix_normal;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.pbo.brix_util.Commons;
 
@@ -10,9 +12,24 @@ public class Map {
 
 	//Fields
 	private int [][] theMap;
-	private int brickHeight, brickWidth;
+	private int brickHeight, brickWidth, second = 0;
 	public final int paddleHOR = 80, paddleVER = 50;
 	boolean hasil = false;
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
+
+		@Override
+		public void run() {
+			second++;
+			
+		}};
+		
+	public boolean Time() {
+		boolean cek = false;
+		if (second == 20)
+				cek = true;
+		return cek;
+	}
 	
 	public Map(int row, int col, int x) {
 		if(x == 1) {
@@ -21,9 +38,16 @@ public class Map {
 		else if (x == 2) {
 			initMap2(row,col);
 		}
-		else if (x == 3 || x == 4) {
+		else if (x == 3) {
 			initMap3(row,col);
 		}
+		else if (x == 4){
+			initMap4(row,col);
+		}
+		else if (x == 5) {
+			initMap5(row,col);
+		}
+		
 		
 		brickWidth = (Commons.WIDTH - 2 * paddleHOR) / col;
 		brickHeight = (Commons.HEIGHT/3 - paddleVER) / row;
@@ -60,6 +84,35 @@ public class Map {
 		theMap[5][2] = 4;
 		theMap[5][4] = 5;
 		theMap[5][1] = 6;
+		theMap[3][3] = 7;
+	}
+	
+	public void initMap4(int row, int col) {
+		theMap = new int[row][col];
+		for(int i=0; i<theMap.length; i++) {
+			for(int j=0;j<theMap[0].length; j++) {
+				int r = (int)(Math.random() * 3 + 1);
+				theMap[i][j] = r;
+			}
+		}
+		theMap[3][2] = 4;
+		theMap[2][4] = 5;
+		theMap[4][1] = 6;
+		theMap[2][1] = 7;
+	}
+	
+	public void initMap5(int row, int col) {
+		theMap = new int[row][col];
+		for(int i=0; i<theMap.length; i++) {
+			for(int j=0;j<theMap[0].length; j++) {
+				int r = (int)(Math.random() * 3 + 1);
+				theMap[i][j] = r;
+			}
+		}
+		theMap[2][3] = 4;
+		theMap[4][2] = 5;
+		theMap[1][4] = 6;
+		theMap[1][3] = 7;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -83,6 +136,9 @@ public class Map {
 					}
 					if(theMap[row][col] == Skill.fastBall) {
 						g.setColor(Skill.fastColor);
+					}
+					if(theMap[row][col] == Skill.extraLife) {
+						g.setColor(Skill.lifeColor);
 					}
 					g.fillRect(col * (brickWidth+5) + paddleHOR , row * (brickHeight+5) + paddleVER, brickWidth, brickHeight);
 					g.setStroke(new BasicStroke(2));
