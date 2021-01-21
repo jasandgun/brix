@@ -46,7 +46,7 @@ public interface Commons {
     MusicPlay lvselMusic = new MusicPlay();
     
     // normal mode
-    final int timeLimit = 5;
+    final int timeLimit = 20;
     String normalButton = "NORMAL";
     String normalBGPath = "res/image/bg_level.jpg";
     MusicPlay normalMusic = new MusicPlay();
