@@ -11,8 +11,9 @@ public class HUD {
 
 	//Fields
 	private int score, lives;
+	private long scoreTimer, livesTimer;
 	private Font font = new FontMaker(Commons.mainFont).getFont();
-	public static int lastScore = 0, currId = 0;
+	public static int lastScore = 0, currId = 0, seconds;
 	
 	//konstruktor
 	public HUD() {
@@ -33,6 +34,19 @@ public class HUD {
 		g.setColor(Color.WHITE);
 		g.drawString("Score: " + score, 20, 20);
 		g.drawString("Lives: " +lives, 20, 40);
+		if(currId + 1 == 5) {
+			g.drawString("Time Left: " +seconds, 370, 20);
+		}
+	}
+	
+	public void bonusScore() {
+		if(lives > 0) {
+			score += lives * 100;
+		}
+		if(seconds > 0 && currId == 4) {
+			score += seconds * 20;
+		}
+		lastScore = score;
 	}
 	
 	public int getScore() {
@@ -58,5 +72,27 @@ public class HUD {
 	
 	public void extraLive() {
 		++lives;
+		setLivesTimer();
+	}
+	
+	public void Multiplier() {
+		score *= (int)(Math.random() * 10);
+		setScoreTimer();
+	}
+	
+	public void setScoreTimer() {
+		scoreTimer = System.nanoTime();
+	}
+
+	public long getScoreTimer() {
+		return scoreTimer;
+	}
+
+	public long getLivesTimer() {
+		return livesTimer;
+	}
+
+	public void setLivesTimer() {
+		livesTimer = System.nanoTime();
 	}
 }

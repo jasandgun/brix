@@ -12,23 +12,34 @@ public class Map {
 
 	//Fields
 	private int [][] theMap;
+	private int secondsPassed = Commons.timeLimit;
 	private int brickHeight, brickWidth;
 	public final int paddleHOR = 80, paddleVER = 50;
 	boolean hasil = false;
-	Timer timer;
+	public static Timer timer;
+	TimerTask task = new TimerTask() {
+		public void run() {
+			System.out.println(secondsPassed);
+			HUD.seconds = secondsPassed;
+			secondsPassed--;
+		}
+	};
+	
 	public static boolean timeout = true;
 	
     class RemindTask extends TimerTask {
         public void run() {
         	timeout = true;
             timer.cancel(); //Terminate the timer thread
+            
         }
     }
-	
     public void startTimer() {
     	timer = new Timer();
         timer.schedule(new RemindTask(), Commons.timeLimit*1000);
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
+    
     
 	public Map(int row, int col, int x) {
 		if(x == 1) {
@@ -81,10 +92,11 @@ public class Map {
 				theMap[i][j] = r;
 			}
 		}
-		theMap[5][2] = 4;
-		theMap[5][4] = 5;
-		theMap[5][1] = 6;
-		theMap[3][3] = 7;
+		theMap[2][2] = 4;
+		theMap[3][4] = 5;
+		theMap[3][1] = 6;
+		theMap[1][3] = 7;
+		theMap[5][4] = 8;
 	}
 	
 	public void initMap4(int row, int col) {
@@ -99,6 +111,7 @@ public class Map {
 		theMap[2][4] = 5;
 		theMap[4][1] = 6;
 		theMap[2][1] = 7;
+		theMap[5][3] = 8;
 	}
 	
 	public void initMap5(int row, int col) {
@@ -113,6 +126,7 @@ public class Map {
 		theMap[4][2] = 5;
 		theMap[1][4] = 6;
 		theMap[1][3] = 7;
+		theMap[5][4] = 8;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -139,6 +153,9 @@ public class Map {
 					}
 					if(theMap[row][col] == Skill.extraLife) {
 						g.setColor(Skill.lifeColor);
+					}
+					if(theMap[row][col] == Skill.multiplier) {
+						g.setColor(Skill.multiColor);
 					}
 					g.fillRect(col * (brickWidth+5) + paddleHOR , row * (brickHeight+5) + paddleVER, brickWidth, brickHeight);
 					g.setStroke(new BasicStroke(2));
@@ -190,4 +207,3 @@ public class Map {
 	}
 	
 }
-

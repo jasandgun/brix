@@ -39,6 +39,8 @@ public class NormalGame extends JPanel {
 	private BufferedImage image;
 	private Graphics2D g;
 	private int currLevel;
+	private int scoreTemp, scoreNow;
+	private boolean isMultiplier, isExtra;
 	
 	//entitas
 	private Ball Bola;
@@ -72,6 +74,8 @@ public class NormalGame extends JPanel {
 		explosions = new ArrayList<Explosion>();
         
 		//boolean
+		isMultiplier = false;
+		isExtra = false;
 		running = true; localRun = true;
 		started = false;
 		image = new BufferedImage(Commons.WIDTH, Commons.HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -150,6 +154,14 @@ public class NormalGame extends JPanel {
 				}
 				if(powerUp.get(i).getType() == Skill.extraLife && !powerUp.get(i).getWasUsed()) {
 					theHUD.extraLive();
+					isExtra = true;
+					powerUp.get(i).setWasUsed(true);
+				}
+				if(powerUp.get(i).getType() == Skill.multiplier && !powerUp.get(i).getWasUsed()) {
+					scoreTemp = theHUD.getScore();
+					theHUD.Multiplier();
+					scoreNow = theHUD.getScore();
+					isMultiplier = true;
 					powerUp.get(i).setWasUsed(true);
 				}
 			}
@@ -214,6 +226,14 @@ public class NormalGame extends JPanel {
 			screenShakeActive = false;
 		}
 		
+		if((System.nanoTime() - theHUD.getScoreTimer()) / 1000 > 1500000) {
+			isMultiplier = false;
+		}
+		
+		if((System.nanoTime() - theHUD.getLivesTimer()) / 1000 > 2000000) {
+			isExtra = false;
+		}
+		
 		for(int i = 0; i < explosions.size(); i++) {
 			explosions.get(i).update();
 			
@@ -225,6 +245,7 @@ public class NormalGame extends JPanel {
 		// Win Condition
 		if (theMap.result() == true) {
 			theMap.resetResult();
+			theHUD.bonusScore();
 			LevelSelectPanel.updateHS();
 			currLevel++;
 			localRun = false;
@@ -266,6 +287,7 @@ public class NormalGame extends JPanel {
 			}
 			BRIX.main_frame.pack();
 		} else {
+			Map.timer.cancel();
 			JLabel label = new JLabel(Commons.finalText);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
         	JOptionPane.showMessageDialog(BRIX.main_frame, label,
@@ -304,11 +326,30 @@ public class NormalGame extends JPanel {
 		theHUD.draw(g);
 		drawSkill();
 		drawLevel();
+		
+		if(isExtra)
+			drawExtra();
 
+		if(isMultiplier)
+			drawMultiplier();
+		
 		for(Explosion bs : explosions) {
 			bs.draw(g);
 		}
 	}
+	
+	public void drawMultiplier() {
+		g.setFont(font.deriveFont(20f));
+		g.setColor(Color.GREEN);
+		g.drawString("+" + (scoreNow - scoreTemp), 130, 20);
+	}
+	
+	public void drawExtra() {
+		g.setFont(font.deriveFont(20f));
+		g.setColor(Color.CYAN);
+		g.drawString("+1", 100, 40);
+	}
+	
 	
 	public void drawLevel() {
 		g.setFont(font);
@@ -321,6 +362,7 @@ public class NormalGame extends JPanel {
 			pu.draw(g);
 		}
 	}
+	
 		
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;	

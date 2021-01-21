@@ -18,10 +18,12 @@ public class Skill {
 	public final static int narrowPaddle = 5;
 	public final static int fastBall = 6;
 	public final static int extraLife = 7;
+	public final static int multiplier = 8;
 	public final static  Color wideColor = Color.GREEN;
 	public final static Color narrowColor = Color.PINK;
 	public final static Color fastColor = Color.RED;
 	public final static Color lifeColor = Color.BLUE;
+	public final static Color multiColor = Color.YELLOW;
 	
 	//konstruktor
 	public Skill(int x, int y, int type, int width, int height) {
@@ -34,8 +36,8 @@ public class Skill {
 		if(type < 4) {
 			type = 4;
 		}
-		if(type > 6) {
-			type = 6;
+		if(type > 8) {
+			type = 8;
 		}
 		if(type == widePaddle) {
 			color = wideColor;
@@ -49,6 +51,9 @@ public class Skill {
 		}
 		if(type == extraLife) { 
 			color = lifeColor; 
+		}
+		if(type == multiplier) { 
+			color = multiColor; 
 		}
 		directionY = (int)(Math.random()*6+1);
 		
